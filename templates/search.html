@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+   {% block title%} Search {% endblock title %}
+      {% block myblogactive %} active{% endblock myblogactive %}
+        {% block body%}
+        <br>
+        <div class="container my-3">
+        <h2>Search Results:</h2>
+        <br>
+        </div>
+        {% load static %}
+        {% if not post %}
+        <div class="container my-3">
+        <center>
+        <img src="../static/images/search_no_result.png" width="50%">
+        <!--<h1 class="fs-1">Your search {{query}}</h1> -->
+        </center>
+        </div>
+        {% endif %}
+        <!-- Blog Timeline section -->
+        {% for item in post%}
+        <div class="container">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-primary">{{item.timeStamp}}</strong>
+                    <h3 class="mb-0">{{ item.title}}</h3>
+                    <div class="mb-1 text-muted">{{item.author}}</div>
+                    <p class="card-text mb-auto">{{item.content | truncatechars:500}}</p>
+                    <a href="/myblog/{{item.slug}}" class="stretched-link">Continue reading</a>
+                    </div>
+                    <div class="col-auto d-none d-lg-block">
+                    <img src="../{{item.blogthumb}}" width="200" height="250">
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <!-- End Blog Timeline section -->
+    {% endblock body %}
+

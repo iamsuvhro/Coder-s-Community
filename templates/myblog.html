@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title%} My BLogs {% endblock title %}
+{% block myblogactive %} active{% endblock myblogactive %}
+    {% block body%}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+            {% if message.tags %} {% endif %} {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+        <br>
+        <div class="container my-3">
+            <!--Validating if User logged In or not -->
+            {% if user.is_authenticated %}
+
+            <h3>Write Your Blog Here</h3>
+                <br>
+                <form action="PostBlog/" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                    <label for="comment" class="form-label"><b>Title</b></label>
+                    <input type="text" class="form-control" id="comment" aria-describedby="emailHelp" name="title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1"><b>Content</b></label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="content" style="height: 400px;"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                    <label for="BlogThumb" class="form-label"><b>Blog Thumbnail</b></label>
+                    <input type="file" class="form-control" id="comment" aria-describedby="emailHelp" name="blogthumb"  accept=".png, .jpg, .pdf, .JPG, .tif" required>
+                    </div>
+
+                    <div class="mb-3">
+                    <label for="comment" class="form-label"><b>Slug</b></label>
+                    <input type="text" class="form-control" id="comment" aria-describedby="emailHelp" name="slug" placeholder="Do you wanna add a specific url" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Post Now</button>
+                </form>
+
+            {% else %}
+            <div class="alert alert-primary" role="alert">
+                Sign Up / Login for posting a blog
+            </div>
+            {% endif %}
+
+        </div>
+        <!-- End the container -->
+        <!-- Loading all static files -->
+        {% load static %}
+            <div class="container">
+                <h2>Your Blogs</h2>
+                <br>
+            </div>
+        <!-- Blog Timeline section -->
+        {% for item in allPost%}
+        <div class="container">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-primary">{{item.timeStamp}}</strong>
+                    <h3 class="mb-0">{{ item.title}}</h3>
+                    <div class="mb-1 text-muted">{{item.author}}</div>
+                    <p class="card-text mb-auto">{{item.content | truncatechars:500}}</p>
+                    <a href="/myblog/{{item.slug}}" class="stretched-link">Continue reading</a>
+                    </div>
+                    <div class="col-auto d-none d-lg-block">
+                    <img src="../{{item.blogthumb}}" width="200" height="250">
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <!-- End Blog Timeline section -->
+{% endblock body %}
+

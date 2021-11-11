@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title%} Coder's Community {% endblock title %}
+{% block myblogactive %} active{% endblock myblogactive %}
+{% block body%}
+{% load static %}
+<!--<img src="{% static 'images/bg.jpg' %}">---->
+<main>
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" role="alert">
+      {% if message.tags %} {% endif %} {{ message }}
+    </div>
+    {% endfor %}
+{% endif %}
+        <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light" bgimage="{% static 'images/bg.jpg' %}">
+             <div class="col-md-5 p-lg-5 mx-auto my-5">
+                <h1 class="display-4 fw-normal">Coder's Community</h1>
+                <p class="lead fw-normal">Write and share your knownledge and experience here. This is an independent platform for writing blog regarding coding.</p>
+                <!-- Search Box-->
+                  <form class="d-flex" action="/search/">
+                    {% csrf_token %}
+                        <input type="text" name="query" placeholder="Hit enter to search anything...">
+                        <br><br>
+                        <center><button class="btn btn-primary p-3" type="submit">Search</button></center>
+                  </form> 
+                <!-- End Search Box-->
+              </div>
+              <div class="product-device shadow-sm d-none d-md-block"></div>
+              <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+          </div>
+        <!-- Blog Timeline section -->
+        {% for item in allPost%}
+        <div class="container">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-primary">{{item.timeStamp}}</strong>
+                    <h3 class="mb-0">{{ item.title}}</h3>
+                    <div class="mb-1 text-muted">{{item.author}}</div>
+                    <p class="card-text mb-auto">{{item.content | truncatechars:500}}</p>
+                    <a href="/myblog/{{item.slug}}" class="stretched-link">Continue reading</a>
+                    </div>
+                    <div class="col-auto d-none d-lg-block">
+                    <img src="../{{item.blogthumb}}" width="200" height="250">
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <!-- End Blog Timeline section -->
+</main>
+
+<script type="text/javascript" src="js/bootstrap/bootstrap-dropdown.js"></script>
+<script>
+     $(document).ready(function(){
+        $('.dropdown-toggle').dropdown()
+    });
+</script>
+<style> 
+          input[type=text] {
+            width: 650px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: white;
+            background-image: url('https://cdn0.iconfinder.com/data/icons/very-basic-2-android-l-lollipop-icon-pack/24/search-512.png/');
+            background-position: 10px 10px; 
+            background-repeat: no-repeat;
+            padding: 12px 20px 12px 40px;
+            -webkit-transition: width 0.4s ease-in-out;
+            transition: width 0.4s ease-in-out;
+          }
+
+          input[type=text]:focus {
+            width: 100%;
+          }
+</style>
+{% endblock body %}
